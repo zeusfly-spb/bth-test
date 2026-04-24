@@ -105,8 +105,9 @@ class ProductFactory extends Factory
     {
         $category = Category::all()->random();
         
-        $product = $this->faker->randomElement(self::$productsByCategory[$category->name]);
-        
+        // $product = $this->faker->randomElement(self::$productsByCategory[$category->name]);
+        $products = self::$productsByCategory[$category->name];
+        $product = $products[array_rand($products)];
         return [
             'category_id' => $category->id,
             'name' => $product['name'],
@@ -115,13 +116,4 @@ class ProductFactory extends Factory
           ];
     }
     
-    protected function generateRandomProduct(?Category $category = null): array
-    {
-        return [
-            'category_id' => $category?->id ?? Category::factory(),
-            'name' => $this->faker->realText(50),
-            'description' => $this->faker->realText(200),
-            'price' => $this->faker->numberBetween(500, 100000),
-        ];
-    }
 }
