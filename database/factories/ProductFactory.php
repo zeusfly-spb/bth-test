@@ -100,14 +100,35 @@ class ProductFactory extends Factory
             ['name' => 'Витамины для кошек', 'description' => 'Таблетки, шерсть и когти'],
         ],
     ];
+
+    protected static array $usedProductIndexesByCategory = [];
     
     public function definition(): array
     {
-        $category = Category::all()->random();
-        
-        // $product = $this->faker->randomElement(self::$productsByCategory[$category->name]);
+        $supportedCategoryNames = array_keys(self::$productsByCategory);
+        $categories = Category::query()
+            ->whereIn('name', $supportedCategoryNames)
+            ->get();
+
+        $availableCategories = $categories->filter(function (Category $category) {
+            $usedIndexes = self::$usedProductIndexesByCategory[$category->name] ?? [];
+            return count($usedIndexes) < count(self::$productsByCategory[$category->name]);
+        })->values();
+
+        if ($availableCategories->isEmpty()) {
+            self::$usedProductIndexesByCategory = [];
+            $availableCategories = $categories->values();
+        }
+
+        $category = $availableCategories->random();
         $products = self::$productsByCategory[$category->name];
-        $product = $products[array_rand($products)];
+        $usedIndexes = self::$usedProductIndexesByCategory[$category->name] ?? [];
+        $availableIndexes = array_values(array_diff(array_keys($products), $usedIndexes));
+        $productIndex = $availableIndexes[array_rand($availableIndexes)];
+
+        self::$usedProductIndexesByCategory[$category->name][] = $productIndex;
+        $product = $products[$productIndex];
+
         return [
             'category_id' => $category->id,
             'name' => $product['name'],
