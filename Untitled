@@ -1,0 +1,6 @@
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd)":/var/www/html \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    bash -c "composer create-project laravel/laravel bth-test \"^11.0\" && cd bth-test && composer require laravel/sail --dev && php artisan sail:install --with=mysql"
