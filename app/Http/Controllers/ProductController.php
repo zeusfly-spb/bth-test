@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::with('category')->paginate(10));
+        return ProductResource::collection(Product::with('category')->paginate(10)->withPath('/products'));
     }
 
     /**
@@ -29,7 +29,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'price' => ['required', 'integer', 'min:0'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+        ]);
+
+        $product = Product::create($validated);
+
+        return response()->json(new ProductResource($product->load('category')), 201);
     }
 
     /**
@@ -37,7 +46,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return response()->json(new ProductResource(Product::find($id))); 
     }
 
     /**
@@ -53,7 +62,15 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $product = Product::find($id);
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|string|max:255',
+            'price' => 'sometimes|required|integer|min:1',
+            'category_id' => 'sometimes|integer|exists:categories,id'
+        ]);
+        $product->fill($validated)->save();
+        return response()->json(new ProductResource($product));        
     }
 
     /**
@@ -61,6 +78,6 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return response()->json(['result' => Product::find($id)->delete()]);
     }
 }

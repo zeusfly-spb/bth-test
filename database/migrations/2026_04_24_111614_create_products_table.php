@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('price')->unsigned();
             $table->foreignId('category_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
