@@ -1,21 +1,19 @@
 <template>
-    <div class="app-layout">
-        <header class="app-layout__header">
-            <slot name="header">
-                <h1 class="app-layout__title">BTH Test</h1>
-            </slot>
-        </header>
-
-        <main class="app-layout__content">
-            <slot />
-        </main>
-
+    <v-app>
+        <v-app-bar app>
+            <v-app-bar-title>BTH-TEST</v-app-bar-title>
+        </v-app-bar>
+        <v-main>
+            <v-container fluid>
+                <slot />
+            </v-container>
+        </v-main>
         <footer class="app-layout__footer">
             <slot name="footer">
-                <small>Inertia + Vue</small>
+                <small>&copy; 2026 BTH-TEST </small>
             </slot>
         </footer>
-    </div>
+    </v-app>
 </template>
 
 <script setup>

@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
+use Inertia\Inertia;
+
 
 class ProductController extends Controller
 {
+    public function list()
+    {
+        $products = Product::with('category')->paginate(15)->withPath('/products');
+        return Inertia::render('Main', ['products' => $products]);
+    }
     /**
      * Display a listing of the resource.
      */
