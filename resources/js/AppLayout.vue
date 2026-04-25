@@ -10,7 +10,7 @@
         </v-main>
         <footer class="app-layout__footer">
             <slot name="footer">
-                <small>&copy; 2026 BTH-TEST </small>
+                <small>&copy; 2026 Сайфутдинов О.А. </small>
             </slot>
         </footer>
     </v-app>

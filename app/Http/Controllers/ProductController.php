@@ -10,17 +10,18 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function list()
-    {
-        $products = Product::with('category')->paginate(10)->withPath('/products');
-        return Inertia::render('Main', ['rawProducts' => ProductResource::collection($products)]);
-    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return ProductResource::collection(Product::with('category')->paginate(10)->withPath('/products'));
+        $categoryId = request()->input('category_id');
+        if ($categoryId) {
+            $products = Product::with('category')->where('category_id', $categoryId)->paginate(10);
+        } else {
+            $products = Product::with('category')->paginate(10);
+        }
+        return ProductResource::collection($products);
     }
 
     /**
@@ -53,7 +54,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(new ProductResource(Product::find($id))); 
+        $product = Product::with('category')->find($id);
+        return response()->json(new ProductResource($product)); 
     }
 
     /**
