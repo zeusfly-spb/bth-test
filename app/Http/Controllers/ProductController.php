@@ -12,8 +12,8 @@ class ProductController extends Controller
 {
     public function list()
     {
-        $products = Product::with('category')->paginate(15)->withPath('/products');
-        return Inertia::render('Main', ['products' => $products]);
+        $products = Product::with('category')->paginate(10)->withPath('/products');
+        return Inertia::render('Main', ['rawProducts' => ProductResource::collection($products)]);
     }
     /**
      * Display a listing of the resource.

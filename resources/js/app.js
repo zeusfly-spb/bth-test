@@ -26,8 +26,15 @@ const vuetify = createVuetify({
     },
 });
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+import axios from 'axios'
 
+async function initCsrf() {
+  await axios.get('/sanctum/csrf-cookie')
+};
+
+await initCsrf();
+
+const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
