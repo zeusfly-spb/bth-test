@@ -11,6 +11,6 @@
 </template>
 
 <script setup>
-import AppLayout from "../layouts/AppLayout.vue";
+import AppLayout from "../AppLayout.vue";
 import { Head } from "@inertiajs/vue3";
 </script>

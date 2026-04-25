@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import inertia from '@inertiajs/vite'
+import inertia from '@inertiajs/vite';
+import vuetify from 'vite-plugin-vuetify';
 
 
 
@@ -13,5 +14,6 @@ export default defineConfig({
         }),
         vue(),
         inertia(),
+        vuetify({ autoImport: true }),
     ],
 });
