@@ -3,36 +3,36 @@
         <Head 
             :title="product?.name" 
         />
-        <v-row
-            class="mb-2"
-        >
-            <v-tooltip
-                text="Назад"
-            >
-                <template #activator="{ props }">
-                    <Link 
+        <div class="page-shell">
+            <v-row class="mb-4">
+                <v-col cols="12">
+                    <Link
                         href="/"
-                        class="text-decoration-none"
+                        class="text-decoration-none page-back"
                         v-bind="props"
                     >
-                        <v-icon>mdi-arrow-left</v-icon>
+                        <v-icon size="20">mdi-arrow-left</v-icon>
+                        <span>К списку товаров</span>
                     </Link>
-                </template>
-            </v-tooltip>
-        </v-row>
-        <v-card
-            :title="product?.name"
-        >
-            <v-list lines="two">
-                <v-list-item
-                    :title="`Описание: ${product?.description}`"
-                    :subtitle="`Категория: ${product?.category?.name}`" 
-                />
-                <v-list-item
-                    :title="`Цена: ${product?.price} р.`" 
-                />
-            </v-list>
-        </v-card>
+                </v-col>
+            </v-row>
+            <v-card
+                :title="product?.name"
+                class="page-card"
+                rounded="xl"
+                elevation="12"
+            >
+                <v-list lines="two">
+                    <v-list-item
+                        :title="`Описание: ${product?.description}`"
+                        :subtitle="`Категория: ${product?.category?.name}`"
+                    />
+                    <v-list-item
+                        :title="`Цена: ${product?.price} р.`"
+                    />
+                </v-list>
+            </v-card>
+        </div>
     </AppLayout>
 </template>
 

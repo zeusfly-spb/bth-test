@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\ProductResource;
@@ -35,17 +37,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'price' => ['required', 'integer', 'min:0'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
-        ]);
-
-        $product = Product::create($validated);
-
+        $product = Product::create($request->validated());
         return response()->json(new ProductResource($product->load('category')), 201);
     }
 
@@ -69,16 +63,10 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductUpdateRequest $request, string $id)
     {
         $product = Product::find($id);
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|string|max:255',
-            'price' => 'sometimes|required|integer|min:1',
-            'category_id' => 'sometimes|integer|exists:categories,id'
-        ]);
-        $product->fill($validated)->save();
+        $product->fill($request->validated())->save();
         return response()->json(new ProductResource($product));        
     }
 

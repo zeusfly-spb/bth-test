@@ -1,44 +1,52 @@
 <template>
     <AppLayout>
-        <Head title="Главная" />
+        <Head title="Товары" />
+        <div class="page-shell">
+            <v-row justify="end" class="mb-3">
+                <v-col cols="12" md="4" lg="3">
+                    <v-select
+                        v-model="selectedCategoryId"
+                        :items="categories"
+                        item-title="name"
+                        item-value="id"
+                        label="Категория"
+                        variant="outlined"
+                        bg-color="white"
+                        rounded="lg"
+                        hide-details
+                        @update:model-value="getProducts"
+                    />
+                </v-col>
+            </v-row>
 
-        <v-row justify="end">
-            <v-col cols="2">
-                <v-select
-                    v-model="selectedCategoryId"
-                    :items="categories"
-                    item-title="name"
-                    item-value="id"
-                    label="Категория"
-                    variant="outlined"
-                    @update:model-value="getProducts"
+            <v-card class="page-card" title="Товары" rounded="xl" elevation="12">
+                <v-card-text>
+                    <v-data-table
+                        :items="products.data"
+                        :headers="tableHeaders"
+                        no-data-text="Товары не найдены"
+                        hide-default-footer
+                        hover
+                        @click:row="rowClick"
+                    >
+                        <template 
+                            #bottom
+                            v-if="products?.meta?.total"
+                        >
+                            <div class="d-flex justify-center pa-4 text-medium-emphasis">
+                                Всего товаров: {{ products?.meta?.total }} Показаны: с {{ products?.meta?.from }} по {{ products?.meta?.to }}
+                            </div>
+                        </template>
+                    </v-data-table>
+                </v-card-text>
+                <v-pagination
+                    :length="(meta?.last_page ?? 1)"
+                    v-model="currentPage"
+                    :total-visible="7"
+                    class="pb-1"
                 />
-            </v-col>            
-        </v-row>
-
-        <v-card title="Товары">
-            <v-card-text>
-                <v-data-table
-                    :items="products.data"
-                    :headers="tableHeaders"
-                    no-data-text="Товары не найдены"
-                    hide-default-footer
-                    hover
-                    @click:row="rowClick"
-                >
-                    <template #bottom>
-                        <div class="d-flex justify-center pa-4">
-                            Всего товаров: {{ products?.meta?.total }} Показаны: с {{ products?.meta?.from }} по {{ products?.meta?.to }}
-                        </div>
-                    </template>
-                </v-data-table>
-            </v-card-text>
-            <v-pagination 
-                :length="(meta?.last_page ?? 1)" 
-                v-model="currentPage"
-                :total-visible="7"
-            />
-        </v-card>
+            </v-card>
+        </div>
         
     </AppLayout>   
 </template>
@@ -93,3 +101,36 @@ watch(selectedCategoryId, () => {
 getCategories();
 getProducts();
 </script>
+
+<style>
+.page-shell {
+    min-height: calc(100vh - 160px);
+    padding: 1.25rem;
+    border-radius: 1rem;
+    background: radial-gradient(circle at top left, #dbeafe, #f8fafc 45%, #eef2ff);
+}
+
+.page-card {
+    border: 1px solid rgba(99, 102, 241, 0.14);
+}
+
+.page-back {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.45rem 0.8rem;
+    border-radius: 0.65rem;
+    color: rgb(var(--v-theme-primary));
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+}
+
+.save-btn {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+}
+</style>
