@@ -12,7 +12,7 @@
 1. Клонируйте репозиторий и перейдите в папку проекта:
 
    ```bash
-   git clone <URL_РЕПОЗИТОРИЯ>
+   git clone https://github.com/zeusfly-spb/bth-test
    cd bth-test
    ```
 
@@ -51,10 +51,10 @@
    ./vendor/bin/sail artisan key:generate
    ```
 
-3. Выполните миграции:
+3. Выполните миграции и сидеры:
 
    ```bash
-   ./vendor/bin/sail artisan migrate
+   ./vendor/bin/sail artisan migrate --seed
    ```
 
 4. Установите JS-зависимости:
@@ -66,10 +66,10 @@
 5. Запустите проект:
 
    - Backend + инфраструктура уже работают в контейнерах.
-   - Для frontend в режиме разработки:
+   - Соберите frontend:
 
      ```bash
-     ./vendor/bin/sail npm run dev
+     ./vendor/bin/sail npm run build
      ```
 
 6. Откройте приложение в браузере:
@@ -84,18 +84,3 @@
 ./vendor/bin/sail down               # остановить контейнеры
 ```
 
-## (Опционально) Алиас для Sail
-
-Чтобы не писать каждый раз `./vendor/bin/sail`, можно добавить алиас:
-
-```bash
-alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
-```
-
-После этого команды можно запускать так:
-
-```bash
-sail up -d
-sail artisan migrate
-sail npm run dev
-```
